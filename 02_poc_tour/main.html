@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Let's POC</title>
+  <link rel="stylesheet" href="../css/style.min.css">
+  <script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function(){
+      window.scrollTo(0, 0);
+
+      let loaded = false;
+const intro2_video_playback = 350; // 숫자가 클수록 천천히 재생
+const intro2_video_ending = 800;
+const intro2_video_element = document.querySelector("#poc_tour_wrap .video");
+const intro2_wrap_start = document.getElementById("poc_tour_wrap");
+const intro2_wrap_start_offsetTop = intro2_wrap_start.offsetTop; // 미리 계산한 값
+
+// Throttle 함수 - 일정 간격으로 함수 실행
+let isScrolling = false;
+const throttle = (func, delay) => {
+  if (!isScrolling) {
+    isScrolling = true;
+    setTimeout(() => {
+      func();
+      isScrolling = false;
+    }, delay);
+  }
+};
+
+// 비디오 재생 함수
+const play = () => {
+  const scrollPosition = window.scrollY - intro2_wrap_start_offsetTop;
+  if (scrollPosition >= 0) {
+    intro2_video_element.currentTime = scrollPosition / intro2_video_playback;
+  }
+};
+
+// 스크롤 이벤트 처리
+document.addEventListener("scroll", () => {
+  throttle(() => {
+    play();
+  }, 50);  // 50ms마다 한 번씩만 play() 실행
+});
+
+// 영상이 로드되었을 때의 처리
+intro2_video_element.addEventListener("loadedmetadata", () => {
+  if (!loaded) {
+    intro2_wrap_start.style.height =
+      intro2_video_element.duration * intro2_video_playback + intro2_video_ending + "px";
+    fadeUp(intro2_wrap_start);
+    loaded = true; // 한 번만 실행되도록 설정
+  }
+});
+
+// 요소를 페이드업 처리하는 함수
+const fadeUp = (element) => {
+  element.classList.remove("hidden");
+  setTimeout(() => {
+    element.classList.remove("transition-duration");
+  }, 2000); // 2초 후에 transition-duration 제거
+};
+
+// 비디오 파일 설정
+intro2_video_element.src = "../video/Space Story.mp4";
+
+
+$(window).on('scroll',function(){
+  var scroll = $(document).scrollTop();
+        $('.scroll').text('Scroll: ' + scroll);
+});
+
+  // .info_wrap 안의 버튼과 그 형제 요소인 .content_info를 선택
+  const infoWrap = document.querySelector('.info_wrap');
+  const button = infoWrap.querySelector('button');
+  const contentInfo = infoWrap.querySelector('.content_info');
+  
+  // 버튼 클릭 이벤트 리스너
+  button.addEventListener('click', function() {
+    // 버튼에 .close 클래스 추가 또는 제거
+    button.classList.toggle('close');
+    
+    // .close 클래스가 있으면 .content_info 보이게 하고, 없으면 숨기기
+    if (button.classList.contains('close')) {
+      contentInfo.style.display = 'block'; // .content_info 보이기
+    } else {
+      contentInfo.style.display = 'none'; // .content_info 숨기기
+    }
+  });
+
+
+  // #section1 요소 선택
+  const section1 = document.querySelector('#section1');
+  
+  // 초기 상태에서 #section1을 숨김
+  section1.style.display = 'none';
+  
+  // 스크롤 이벤트 리스너
+  window.addEventListener('scroll', function() {
+    // 현재 스크롤 위치
+    const scrollPosition = window.scrollY;
+    
+    // 스크롤 위치가 1020에서 1720 사이일 때 #section1을 보이게 함
+    if (scrollPosition >= 1010 && scrollPosition <= 1790) {
+      section1.style.display = 'block'; // #section1 보이기
+    } else {
+      section1.style.display = 'none'; // #section1 숨기기
+    }
+  });
+
+
+    });
+  </script>
+</head>
+<body style="height: 100vh;">
+  <h5 class="scroll">0</h5>
+  <header>
+    <div class="container">
+      <a href="../index.html"><img src="../images/logo_black.png" alt="POC SEONGSU 로고"></a>
+      <div class="header_right">
+        <h2 class="menu_title">POC Tour</h2>
+        <button type="button" class="header_menu_bt"></button>
+      </div>
+    </div>
+  </header>
+  <div id="poc_tour_wrap">
+    <div class="poc_tour_video_wrap">
+      <video src="../video/Space Story.mp4" muted class="video"></video>
+    </div>
+
+    <div class="info_section" id="section1">
+     
+      
+
+      <div class="info_wrap" id="info_1_1">
+        <div class="content_info">
+          <img src="../images/poc_tour/common_space.jpg" alt="">
+          <div class="textbox">
+            <h2>공용 공간</h2>
+            <div class="sub_textbox">
+              <h6>121(A동), 123(B동)</h6>
+              <h6>각 층</h6>
+            </div>
+          </div>
+          <p>사용성 및 편리성을 고려한 공용부 공간.</p>
+        </div>
+        <button class="btn_info"></button>
+      </div>
+
+    </div>
+
+  </div>
+</body>
+</html>
