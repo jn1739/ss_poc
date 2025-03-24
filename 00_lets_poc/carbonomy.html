@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbonomy</title>
+  <link rel="stylesheet" href="../css/style.min.css">
+  <script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function() {
+
+    // 영상 요소와 버튼 요소들
+    const videoElement = document.getElementById('carbonomy-video');
+    const deskButton = document.getElementById('desk-btn');
+    const fitButton = document.getElementById('fit-btn');
+    const closeVideoButton = document.querySelector('.btn_close_video'); // 닫기 버튼
+
+    // 원래 영상의 경로
+    const originalVideoSrc = "../video/2- 카보노미 - (1) 디폴트.mp4";
+
+    // 변경된 영상 경로들
+    const deskVideoSrc = "../video/2- 카보노미 - (2) 책상 애니.mp4";
+    const fitVideoSrc = "../video/2- 카보노미 - (3) Fit 애니.mp4";
+
+    // 영상 변경 함수
+    function changeVideo(newVideoSrc) {
+        // 영상이 페이드 아웃되도록 클래스 추가
+        videoElement.classList.add('fade-out');
+
+        // 페이드 아웃 효과가 끝난 후 영상 변경
+        setTimeout(() => {
+            videoElement.src = newVideoSrc;
+            videoElement.load();  // 새로운 영상 로드
+
+            // 영상이 페이드 인되도록 클래스 추가
+            videoElement.classList.remove('fade-out');
+            videoElement.classList.add('fade-in');
+
+            // 0.4초 후에 페이드 인 클래스를 제거
+            setTimeout(() => {
+                videoElement.classList.remove('fade-in');
+            }, 400); // 0.4초 후에 'fade-in' 클래스 제거
+
+            // 변경된 영상이 시작되면 닫기 버튼만 보이기
+            closeVideoButton.style.display = 'block';
+            deskButton.style.display = 'none';
+            fitButton.style.display = 'none';
+        }, 400); // 0.4초 후에 영상 소스 변경 (페이드 아웃 효과 시간)
+    }
+
+    // 버튼 클릭 이벤트 리스너 추가
+    deskButton.addEventListener('click', () => {
+        changeVideo(deskVideoSrc);
+    });
+
+    fitButton.addEventListener('click', () => {
+        changeVideo(fitVideoSrc);
+    });
+
+    // 영상 재생이 끝났을 때 원래 영상으로 돌아가기
+    videoElement.addEventListener('ended', () => {
+        // 원래 영상으로 돌아가기
+        videoElement.classList.add('fade-out');
+        setTimeout(() => {
+            videoElement.src = originalVideoSrc;
+            videoElement.load();
+            videoElement.classList.remove('fade-out');
+            videoElement.classList.add('fade-in');
+
+            // 0.4초 후에 페이드 인 클래스를 제거
+            setTimeout(() => {
+                videoElement.classList.remove('fade-in');
+            }, 400); // 0.4초 후에 'fade-in' 클래스 제거
+
+            // 원래 영상이 재생되면 닫기 버튼 숨기기
+            closeVideoButton.style.display = 'none';
+
+            // 모든 버튼 다시 보이기
+            deskButton.style.display = 'block';
+            fitButton.style.display = 'block';
+        }, 400); // 0.4초 후에 원래 영상으로 돌아가기
+    });
+
+    // .btn_close_video 클릭 시 원래 영상으로 돌아가기
+    closeVideoButton.addEventListener('click', () => {
+        videoElement.classList.add('fade-out');
+        setTimeout(() => {
+            videoElement.src = originalVideoSrc;
+            videoElement.load();
+            videoElement.classList.remove('fade-out');
+            videoElement.classList.add('fade-in');
+
+            // 0.4초 후에 페이드 인 클래스를 제거
+            setTimeout(() => {
+                videoElement.classList.remove('fade-in');
+            }, 400); // 0.4초 후에 'fade-in' 클래스 제거
+
+            // 원래 영상이 재생되면 닫기 버튼 숨기기
+            closeVideoButton.style.display = 'none';
+
+            // 모든 버튼 다시 보이기
+            deskButton.style.display = 'block';
+            fitButton.style.display = 'block';
+        }, 400); // 0.4초 후에 원래 영상으로 돌아가기
+    });
+
+
+
+
+      //오른쪽패널 상단 내비 공통
+      // 모든 .bt_sub_menu 버튼과 .lets_poc_sub_right_contentbox li 요소를 가져옵니다.
+      const buttons = document.querySelectorAll('.bt_sub_menu');
+      const contentItems = document.querySelectorAll('.lets_poc_sub_right_contentbox > li');
+
+      // 각 버튼에 클릭 이벤트 리스너를 추가합니다.
+      buttons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+          // 모든 .lets_poc_sub_right_contentbox li 요소를 숨깁니다.
+          contentItems.forEach(item => {
+            item.style.display = 'none';
+          });
+
+          // 클릭된 버튼에 해당하는 .lets_poc_sub_right_contentbox li 요소만 표시합니다.
+          contentItems[index].style.display = 'block';
+
+          // 모든 버튼에서 selected 클래스를 제거하고 클릭된 버튼에 selected 클래스를 추가합니다.
+          buttons.forEach(btn => {
+            btn.classList.remove('selected');
+          });
+          button.classList.add('selected');
+
+          // 클릭된 li 요소가 화면에서 제일 위로 오게 scrollTop을 설정합니다.
+          contentItems[index].scrollIntoView({
+            behavior: 'auto',
+            block: 'start' // 'start'로 설정하면 해당 요소가 화면의 최상단에 위치하게 됩니다.
+          });
+
+          // 해당 li 안의 .slider_img_wrap 요소를 찾아 애니메이션을 시작합니다.
+          const sliderWrap = contentItems[index].querySelector('.slider_img_wrap');
+          if (sliderWrap) {
+            startSlider(sliderWrap); // startSlider는 슬라이드를 시작하는 함수입니다.
+          }
+        });
+      });
+
+      // 슬라이드 애니메이션을 처리하는 함수
+      function startSlider(sliderWrap) {
+        const slideWidth = 325;  // 각 슬라이드의 너비
+        const totalSlides = sliderWrap.querySelectorAll('li').length -1;  // 총 슬라이드 개수
+        let currentIndex = 0;  // 현재 슬라이드 인덱스
+        let slideInterval;  // setInterval을 저장할 변수
+
+        // 슬라이드를 무한 반복하도록 애니메이션
+        function animateSlider() {
+          slideInterval = setInterval(function() {
+            // 슬라이드를 왼쪽으로 325px만큼 이동
+            $(sliderWrap).animate({
+              left: -(slideWidth * (currentIndex + 1))  // 이동할 거리 계산
+            }, 1000, function() {
+              currentIndex++;  // 현재 인덱스 증가
+
+              // 마지막 슬라이드에 도달하면 처음으로 되돌리기
+              if (currentIndex >= totalSlides) {
+                currentIndex = 0;
+                // 첫 번째 슬라이드로 돌아갈 때 부드럽게 이동하도록 위치를 초기화
+                $(sliderWrap).css('left', 0);
+              }
+            });
+          }, 3000);  // 3초마다 실행
+        }
+      
+
+        // 슬라이드 애니메이션 시작
+        animateSlider();
+
+        // 슬라이드 애니메이션을 중단하고 재시작하는 함수
+        sliderWrap.addEventListener('click', () => {
+          clearInterval(slideInterval);
+          currentIndex = 0;  // 처음부터 다시 시작하려면 인덱스를 0으로 설정
+          $(sliderWrap).css('left', 0);  // 위치 초기화
+          animateSlider();  // 새롭게 슬라이드 애니메이션 시작
+        });
+      }
+
+      // 페이지 로드 시, 첫 번째 탭 내용은 기본적으로 보이게 설정합니다.
+      contentItems.forEach((item, index) => {
+        if (index !== 0) {
+          item.style.display = 'none';
+        } else {
+          item.style.display = 'block';
+          // 첫 번째 콘텐츠가 보일 때, 그 안에 슬라이더도 시작하도록 합니다.
+          const firstSliderWrap = item.querySelector('.slider_img_wrap');
+          if (firstSliderWrap) {
+            startSlider(firstSliderWrap); // 첫 번째 슬라이드 애니메이션 시작
+          }
+        }
+      });
+
+
+
+      // 오른쪽 패널 탭 공통 
+      
+      // 홍보영상 열기
+      $('.bt_carbonomy_open_video button').on('click', function() {
+        window.open('../video/lets_poc_carbonomy_video_02.mp4', '_blank');
+      });
+
+      // 브로셔 다운로드
+      document.querySelector(".bt_carbonomy_download_brochure > button").addEventListener("click", function() {
+        // 다운로드를 위한 링크 생성
+        const link = document.createElement('a');
+        link.href = '../download/Carbonomy Brochure V1.0.pdf';  // 다운로드할 파일 경로
+        link.download = 'Carbonomy Brochure V1.0.pdf';  // 다운로드할 파일 이름
+        link.click();  // 다운로드 링크 클릭
+      });
+
+
+
+
+      // 푸터 [back to top] 버튼 클릭 시 제일 위 내용으로 이동
+      document.querySelectorAll('.bt_back_to_top').forEach(button => {
+          button.addEventListener('click', function() {
+              // 현재 버튼이 속한 <li> 요소를 찾음
+              const li = button.closest('li');
+              
+              // <li>의 스크롤을 맨 위로 이동
+              li.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'start' // <li>가 맨 위로 가도록 설정
+              });
+          });
+      });
+    
+    });
+  </script>
+</head>
+<body>
+  <div class="lets_poc_sub_wrap" id="lets_poc_sub_carbonomy">
+    <div class="lets_poc_sub_left">
+      <header>
+        <div class="header_container">
+          <a href="../index.html"><img src="../images/logo_black.png" alt="POC SEONGSU 로고"></a>
+          <div class="header_right">
+            <h2 class="menu_title">Let's POC </h2>
+            <button type="button" class="header_menu_bt"></button>
+          </div>
+        </div>
+      </header>
+      <video id="carbonomy-video" class="video" muted autoplay>
+        <source src="../video/2- 카보노미 - (1) 디폴트.mp4" type="video/mp4">
+      </video>
+      <div class="lets_poc_sub_left_btgroup">
+        <button type="button" class="lets_poc_sub_left_bt bt_primary" id="desk-btn">책상 탄소배출량 확인</button>
+        <button type="button" class="lets_poc_sub_left_bt bt_primary" id="fit-btn">FIT 탄소배출량 확인</button>
+      </div>
+      <a href="./main.html" class="link_lets_poc_main"> <img src="../images/lets_poc/arrow.png" alt=""> PoC로 돌아가기</a>
+      <button class="btn_close_video"></button>
+    </div>
+    <div class="lets_poc_sub_right">
+      <nav class="lets_poc_sub_right_nav">
+        <div class="top">
+          <img src="../images/logo_carbonomy.png" alt="Carbonomy 로고" class="logo">
+          <button type="button" class="bt_contanct">지금 바로 문의하기</button>
+        </div>
+        <div class="bottom">
+          <button type="button" class="bt_sub_menu selected">Carbonomy</button>
+          <div class="vertical-divider"></div>
+          <button type="button" class="bt_sub_menu">가구 탄소배출량</button>
+          <div class="vertical-divider"></div>
+          <button type="button" class="bt_sub_menu">건물 탄소배출량</button>
+        </div>
+      </nav>
+      <ul class="lets_poc_sub_right_contentbox">
+        <!-- 오른쪽 패널 첫번째 탭(B.Grid) 내용 -->
+        <li>
+          <video src="../video/lets_poc_carbonomy_video_01.mp4" muted autoplay loop></video>
+          <img src="../images/lets_poc/img_01_01.png" alt="">
+          <div class="bt_carbonomy_open_video">
+            <button type="button"></button>
+          </div>
+          <div>
+            <img src="../images/lets_poc/img_01_02.png" alt="">
+            <div class="slider_box">
+              <ul class="slider_img_wrap">
+                <li><img src="../images/lets_poc/img_01_02_01.png" alt=""></li>
+                <li><img src="../images/lets_poc/img_01_02_02.png" alt=""></li>
+                <li><img src="../images/lets_poc/img_01_02_03.png" alt=""></li>
+                <li><img src="../images/lets_poc/img_01_02_04.png" alt=""></li>
+                <li><img src="../images/lets_poc/img_01_02_01.png" alt=""></li>
+              </ul>
+            </div>
+          </div>
+          <img src="../images/lets_poc/img_01_03.png" alt="">
+          <img src="../images/lets_poc/img_01_04.png" alt="">
+          <div class="bt_carbonomy_download_brochure">
+            <button class="bt_carbonomy_download_brochure" type="button"></button>
+          </div>
+          <img src="../images/lets_poc/img_01_05.png" alt="">
+          <div>
+            <img src="../images/lets_poc/img_01_06.png" alt="">
+            <div class="banner_box">
+              <ul class="banner_wrap">
+                <li><img src="../images/lets_poc/img_01_06_01.png" alt=""></li>
+                <li><img src="../images/lets_poc/img_01_06_01.png" alt=""></li>
+              </ul>
+            </div>
+          </div>
+          <img src="../images/lets_poc/img_01_07.png" alt="">
+          <img src="../images/lets_poc/img_01_08.png" alt="">
+          <img src="../images/lets_poc/img_01_09.png" alt="">
+          <nav class="footer">
+            <button class="bt_back_to_top"></button>
+          </nav>
+        </li>
+        <!-- 오른쪽 패널 두번째 탭(Design your Module 1X3) 내용 -->         
+        <li>
+          <video src="../video/Text_Typing_01.mp4" muted autoplay loop></video>
+          <img src="../images/lets_poc/img_02_01.png" muted autoplay loop alt="">
+          <video src="../video/그래프 애니 01.mp4" muted autoplay loop></video>
+          <img src="../images/lets_poc/img_02_02.png" alt="">
+          <video src="../video/lets_poc_carbonomy_video_01.mp4" muted autoplay loop></video>
+          <img src="../images/lets_poc/img_01_01.png" alt="">
+          <div class="bt_carbonomy_open_video">
+            <button type="button"></button>
+          </div>
+          <div>
+            <img src="../images/lets_poc/img_01_02.png" alt="">
+            <div class="slider_box">
+              <ul class="slider_img_wrap">
+                <li><img src="../images/lets_poc/img_01_02_01.png" alt=""></li>
+                <li><img src="../images/lets_poc/img_01_02_02.png" alt=""></li>
+                <li><img src="../images/lets_poc/img_01_02_03.png" alt=""></li>
+                <li><img src="../images/lets_poc/img_01_02_04.png" alt=""></li>
+                <li><img src="../images/lets_poc/img_01_02_01.png" alt=""></li>
+              </ul>
+            </div>
+          </div>
+          <img src="../images/lets_poc/img_01_03.png" alt="">
+          <img src="../images/lets_poc/img_01_04.png" alt="">
+          <div class="bt_carbonomy_download_brochure">
+            <button class="bt_carbonomy_download_brochure" type="button"></button>
+          </div>
+          <img src="../images/lets_poc/img_01_05.png" alt="">
+          <div>
+            <img src="../images/lets_poc/img_01_06.png" alt="">
+            <div class="banner_box">
+              <ul class="banner_wrap">
+                <li><img src="../images/lets_poc/img_01_06_01.png" alt=""></li>
+                <li><img src="../images/lets_poc/img_01_06_01.png" alt=""></li>
+              </ul>
+            </div>
+          </div>
+          <img src="../images/lets_poc/img_01_07.png" alt="">
+          <img src="../images/lets_poc/img_01_08.png" alt="">
+          <img src="../images/lets_poc/img_01_09.png" alt="">
+          <nav class="footer">
+            <button class="bt_back_to_top"></button>
+          </nav>
+        </li>
+        <!-- 오른쪽 패널 세번째 탭(Design your Module 1X2) 내용 -->  
+        <li>
+          <video src="../video/Text_Typing_02.mp4" muted autoplay loop></video>
+          <img src="../images/lets_poc/img_03_01.png" alt="">
+          <video src="../video/그래프 애니 02.mp4" muted autoplay loop></video>
+          <img src="../images/lets_poc/img_03_02.png" alt="">
+          <video src="../video/lets_poc_carbonomy_video_01.mp4" muted autoplay loop></video>
+          <img src="../images/lets_poc/img_01_01.png" alt="">
+          <div class="bt_carbonomy_open_video">
+            <button type="button"></button>
+          </div>
+          <div>
+            <img src="../images/lets_poc/img_01_02.png" alt="">
+            <div class="slider_box">
+              <ul class="slider_img_wrap">
+                <li><img src="../images/lets_poc/img_01_02_01.png" alt=""></li>
+                <li><img src="../images/lets_poc/img_01_02_02.png" alt=""></li>
+                <li><img src="../images/lets_poc/img_01_02_03.png" alt=""></li>
+                <li><img src="../images/lets_poc/img_01_02_04.png" alt=""></li>
+                <li><img src="../images/lets_poc/img_01_02_01.png" alt=""></li>
+              </ul>
+            </div>
+          </div>
+          <img src="../images/lets_poc/img_01_03.png" alt="">
+          <img src="../images/lets_poc/img_01_04.png" alt="">
+          <div class="bt_carbonomy_download_brochure">
+            <button class="bt_carbonomy_download_brochure" type="button"></button>
+          </div>
+          <img src="../images/lets_poc/img_01_05.png" alt="">
+          <div>
+            <img src="../images/lets_poc/img_01_06.png" alt="">
+            <div class="banner_box">
+              <ul class="banner_wrap">
+                <li><img src="../images/lets_poc/img_01_06_01.png" alt=""></li>
+                <li><img src="../images/lets_poc/img_01_06_01.png" alt=""></li>
+              </ul>
+            </div>
+          </div>
+          <img src="../images/lets_poc/img_01_07.png" alt="">
+          <img src="../images/lets_poc/img_01_08.png" alt="">
+          <img src="../images/lets_poc/img_01_09.png" alt="">
+          <nav class="footer">
+            <button class="bt_back_to_top"></button>
+          </nav>
+        </li>
+        
+      </ul>
+    </div>
+  </div>
+  <nav class="main_menu">
+    <button class="btn_main_menu_close"></button><img src="" alt="" class="logo">
+    <ul class="main_menu_list">
+      <li>Let's POC</li>
+      <li><a href=""></a></li>
+      <li><a href=""></a></li>
+      <li><a href=""></a></li>
+    </ul>
+  </nav>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architec'Twin</title>
+  <link rel="stylesheet" href="../css/style.min.css">
+  <script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function() {     
+
+      // 영상 요소와 버튼 요소들
+      const videoElement = document.getElementById('architectwin-video');
+      const fenceButton = document.getElementById('fence_btn');
+      const spaceButton = document.getElementById('space_btn');
+      const monitoringButton = document.getElementById('monitoring_btn');
+      const closeVideoButton = document.querySelector('.btn_close_video'); // 닫기 버튼
+
+      // 원래 영상의 경로
+      const originalVideoSrc = "../video/1- 아키텍트윈 - (1) 디폴트.mp4";
+
+      // 변경된 영상 경로들
+      const fenceVideoSrc = "../video/1- 아키텍트윈 - (2) 디지털 펜스.mp4";
+      const spaceVideoSrc = "../video/1- 아키텍트윈 - (3) 공간활용도 분석.mp4";
+      const monitoringVideoSrc = "../video/1- 아키텍트윈 - (4) 측위 모니터링 및 분석.mp4";
+
+      // 영상 변경 함수
+      function changeVideo(newVideoSrc) {
+          // 영상이 페이드 아웃되도록 클래스 추가
+          videoElement.classList.add('fade-out');
+
+          // 페이드 아웃 효과가 끝난 후 영상 변경
+          setTimeout(() => {
+              videoElement.src = newVideoSrc;
+              videoElement.load();  // 새로운 영상 로드
+
+              // 영상이 페이드 인 되도록 클래스 추가
+              videoElement.classList.remove('fade-out');
+              videoElement.classList.add('fade-in');
+
+              // 0.4초 후에 페이드 인 클래스를 제거
+              setTimeout(() => {
+                  videoElement.classList.remove('fade-in');
+              }, 400); // 0.4초 후에 'fade-in' 클래스 제거
+
+              // 변경된 영상이 시작되면 닫기 버튼만 보이도록 설정
+              closeVideoButton.style.display = 'block';
+              fenceButton.style.display = 'none';
+              spaceButton.style.display = 'none';
+              monitoringButton.style.display = 'none';
+          }, 400); // 0.4초 후에 영상 소스 변경 (페이드 아웃 효과 시간)
+      }
+
+      // 버튼 클릭 이벤트 리스너 추가
+      fenceButton.addEventListener('click', () => {
+          changeVideo(fenceVideoSrc);
+      });
+
+      spaceButton.addEventListener('click', () => {
+          changeVideo(spaceVideoSrc);
+      });
+
+      monitoringButton.addEventListener('click', () => {
+          changeVideo(monitoringVideoSrc);
+      });
+
+      // 영상 재생이 끝났을 때 원래 영상으로 돌아가기
+      videoElement.addEventListener('ended', () => {
+          // 원래 영상으로 돌아가기
+          videoElement.classList.add('fade-out');
+          setTimeout(() => {
+              videoElement.src = originalVideoSrc;
+              videoElement.load();
+              videoElement.classList.remove('fade-out');
+              videoElement.classList.add('fade-in');
+
+              // 0.4초 후에 페이드 인 클래스를 제거
+              setTimeout(() => {
+                  videoElement.classList.remove('fade-in');
+              }, 400); // 0.4초 후에 'fade-in' 클래스 제거
+
+              // 원래 영상이 재생되면 닫기 버튼 숨기기
+              closeVideoButton.style.display = 'none';
+
+              // 모든 버튼 다시 보이게 설정
+              fenceButton.style.display = 'block';
+              spaceButton.style.display = 'block';
+              monitoringButton.style.display = 'block';
+          }, 400); // 0.4초 후에 원래 영상으로 돌아가기
+      });
+
+      // .btn_close_video 클릭 시 원래 영상으로 돌아가기
+      closeVideoButton.addEventListener('click', () => {
+          videoElement.classList.add('fade-out');
+          setTimeout(() => {
+              videoElement.src = originalVideoSrc;
+              videoElement.load();
+              videoElement.classList.remove('fade-out');
+              videoElement.classList.add('fade-in');
+
+              // 0.4초 후에 페이드 인 클래스를 제거
+              setTimeout(() => {
+                  videoElement.classList.remove('fade-in');
+              }, 400); // 0.4초 후에 'fade-in' 클래스 제거
+
+              // 원래 영상이 재생되면 닫기 버튼 숨기기
+              closeVideoButton.style.display = 'none';
+
+              // 모든 버튼 다시 보이게 설정
+              fenceButton.style.display = 'block';
+              spaceButton.style.display = 'block';
+              monitoringButton.style.display = 'block';
+          }, 400); // 0.4초 후에 원래 영상으로 돌아가기
+      });
+
+
+      
+
+      //오른쪽패널 상단 내비 공통
+      // 모든 .bt_sub_menu 버튼과 .lets_poc_sub_right_contentbox li 요소를 가져옵니다.
+      const buttons = document.querySelectorAll('.bt_sub_menu');
+      const contentItems = document.querySelectorAll('.lets_poc_sub_right_contentbox > li');
+
+      // 각 버튼에 클릭 이벤트 리스너를 추가합니다.
+      buttons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+          // 모든 .lets_poc_sub_right_contentbox li 요소를 숨깁니다.
+          contentItems.forEach(item => {
+            item.style.display = 'none';
+          });
+
+          // 클릭된 버튼에 해당하는 .lets_poc_sub_right_contentbox li 요소만 표시합니다.
+          contentItems[index].style.display = 'block';
+
+          // 모든 버튼에서 selected 클래스를 제거하고 클릭된 버튼에 selected 클래스를 추가합니다.
+          buttons.forEach(btn => {
+            btn.classList.remove('selected');
+          });
+          button.classList.add('selected');
+
+          // 클릭된 li 요소가 화면에서 제일 위로 오게 scrollTop을 설정합니다.
+          contentItems[index].scrollIntoView({
+            behavior: 'auto',
+            block: 'start' // 'start'로 설정하면 해당 요소가 화면의 최상단에 위치하게 됩니다.
+          });
+
+          // 해당 li 안의 .architectwin_slider_wrap 요소를 찾아 애니메이션을 시작합니다.
+          const sliderWrap = contentItems[index].querySelector('.architectwin_slider_wrap');
+          if (sliderWrap) {
+            startSlider(sliderWrap); // startSlider는 슬라이드를 시작하는 함수입니다.
+          }
+          
+        });
+      });
+ 
+
+      // 푸터 [back to top] 버튼 클릭 시 제일 위 내용으로 이동
+      document.querySelectorAll('.bt_back_to_top').forEach(button => {
+          button.addEventListener('click', function() {
+              // 현재 버튼이 속한 <li> 요소를 찾음
+              const li = button.closest('li');
+              
+              // <li>의 스크롤을 맨 위로 이동
+              li.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'start' // <li>가 맨 위로 가도록 설정
+              });
+          });
+      });
+
+      
+      // 슬라이드 애니메이션을 처리하는 함수
+      function startSlider(sliderWrap, indexWrap) {
+        const slideWidth = 100;  // 각 슬라이드의 너비 (퍼센트 단위로)
+        const totalSlides = sliderWrap.querySelectorAll('li').length -1;  // 총 슬라이드 개수
+        let currentIndex = 0;  // 현재 슬라이드 인덱스
+
+        // 슬라이드를 무한 반복하도록 애니메이션
+        function animateSlider() {
+            // 슬라이드 이동
+            $(sliderWrap).animate({
+                left: -(slideWidth * currentIndex) + '%'  // 이동할 거리 계산
+            }, 1000, function() {
+                // 현재 슬라이드의 비디오를 재생
+                const currentVideo = $(sliderWrap).find('li').eq(currentIndex).find('video')[0];
+                if (currentVideo) {
+                    currentVideo.play();  // 비디오 재생
+                    currentVideo.onended = function() {
+                        // 비디오가 끝났을 때 다음 슬라이드로 이동
+                        nextSlide();
+                    };
+                }
+            });
+        }
+
+        // 슬라이드 인덱스를 증가시키고, 마지막 슬라이드에 도달하면 처음으로 되돌리기
+        function nextSlide() {
+            currentIndex++;
+
+            // 마지막 슬라이드에 도달하면 처음으로 되돌리기
+            if (currentIndex >= totalSlides) {
+                currentIndex = 0;
+                $(sliderWrap).css('left', 0);  // 위치 초기화
+                $(indexWrap).find('li').removeClass('active');  // 기존 active 클래스 제거
+                $(indexWrap).find('li').eq(currentIndex).addClass('active');  // 첫 번째 li에 active 클래스 추가
+            }
+
+            // 현재 인덱스에 맞는 li에 active 클래스 추가
+            $(indexWrap).find('li').removeClass('active');
+            $(indexWrap).find('li').eq(currentIndex).addClass('active');
+
+            // 슬라이드 애니메이션 실행
+            animateSlider();
+          }
+
+          // 슬라이드 애니메이션 시작
+          animateSlider();
+
+          // 슬라이드 애니메이션을 중단하고 재시작하는 함수
+          sliderWrap.addEventListener('click', () => {
+              currentIndex = 0;  // 처음부터 다시 시작하려면 인덱스를 0으로 설정
+              $(sliderWrap).css('left', 0);  // 위치 초기화
+              $(indexWrap).find('li').removeClass('active');  // 기존의 active 클래스 제거
+              $(indexWrap).find('li').eq(currentIndex).addClass('active');  // 첫 번째 li에 active 클래스 추가
+              animateSlider();  // 새롭게 슬라이드 애니메이션 시작
+          });
+      }
+
+      // 첫 번째 슬라이더 실행
+      const sliderWrap1 = document.querySelector('#architectwin_slider1 .architectwin_slider_wrap');  // 첫 번째 슬라이더
+      const indexWrap1 = document.querySelector('#video_slider_index1');  // 첫 번째 슬라이더 인덱스
+      startSlider(sliderWrap1, indexWrap1);
+
+      // 두 번째 슬라이더 실행
+      const sliderWrap2 = document.querySelector('#architectwin_slider2 .architectwin_slider_wrap');  // 두 번째 슬라이더
+      const indexWrap2 = document.querySelector('#video_slider_index2');  // 두 번째 슬라이더 인덱스
+      startSlider(sliderWrap2, indexWrap2);
+    
+    });
+  </script>
+</head>
+<body>
+  <div class="lets_poc_sub_wrap" id="lets_poc_sub_architectwin">
+    <div class="lets_poc_sub_left">
+      <header>
+        <div class="header_container">
+          <a href="../index.html"><img src="../images/logo_black.png" alt="POC SEONGSU 로고"></a>
+          <div class="header_right">
+            <h2 class="menu_title">Let's POC </h2>
+            <button type="button" class="header_menu_bt"></button>
+          </div>
+        </div>
+      </header>
+      <video id="architectwin-video" class="video" muted autoplay loop>
+        <source src="../video/1- 아키텍트윈 - (1) 디폴트.mp4" type="video/mp4">
+      </video>
+      <div class="lets_poc_sub_left_btgroup">
+        <button type="button" class="lets_poc_sub_left_bt bt_primary" id="fence_btn">Digital Fence</button>
+        <button type="button" class="lets_poc_sub_left_bt bt_primary" id="space_btn">공간 활용도 분석</button>
+        <button type="button" class="lets_poc_sub_left_bt bt_primary" id="monitoring_btn">측위 모니터링 및 분석</button>
+      </div>
+      <a href="./main.html" class="link_lets_poc_main"> <img src="../images/lets_poc/arrow.png" alt=""> PoC로 돌아가기</a>
+      <button class="btn_close_video"></button>
+    </div>
+    <div class="lets_poc_sub_right">
+      <nav class="lets_poc_sub_right_nav">
+        <div class="top">
+          <img src="../images/logo_architec.png" alt="FIT 로고" class="logo">
+          <button type="button" class="bt_contanct">지금 바로 문의하기</button>
+        </div>
+        <div class="bottom">
+          <button type="button" class="bt_sub_menu selected">Architec'Twin</button>
+          <div class="vertical-divider"></div>
+          <button type="button" class="bt_sub_menu">보안관리</button>
+          <div class="vertical-divider"></div>
+          <button type="button" class="bt_sub_menu">공간관리</button>
+          <div class="vertical-divider"></div>
+          <button type="button" class="bt_sub_menu">자산관리</button>
+        </div>
+      </nav>
+      <ul class="lets_poc_sub_right_contentbox">
+        <!-- 오른쪽 패널 첫번째 탭(Architec'Twin) 내용 -->
+        <li>
+          <video src="../images/lets_poc/architectwin/01. 인트로영상.mp4" muted autoplay loop></video>
+          <img src="../images/lets_poc/architectwin/img_01_01.png" alt="">
+          <img src="../images/lets_poc/architectwin/img_01_02.png" alt="">
+          <img src="../images/lets_poc/architectwin/img_01_03.png" alt="">
+          <img src="../images/lets_poc/architectwin/img_01_04.png" alt="">
+          <img src="../images/lets_poc/architectwin/img_01_05.png" alt="">
+          <img src="../images/lets_poc/architectwin/img_01_06.png" alt="">
+          <div class="architectwin_slider_area">
+            <div class="architectwin_slider_container" id="architectwin_slider1">
+              <ul class="architectwin_slider_wrap">
+                <li class="slide">
+                  <video src="../images/lets_poc/architectwin/06. 기능별 영상-1. 실내공기질모니터링.mp4" autoplay muted></video>
+                  <div class="video_title_wrap">
+                    <h6>Air Quality Monitoring</h6>
+                    <p>3D Target Hightlight</p>
+                  </div>
+                </li>
+                <li class="slide">
+                  <video src="../images/lets_poc/architectwin/06. 기능별 영상-2. 설비모니터링.mp4" autoplay muted></video>
+                  <div class="video_title_wrap">
+                    <h6>Facility Monitoring</h6>
+                    <p>3D Target Hightlight</p>
+                  </div>
+                </li>
+                <li class="slide">
+                  <video src="../images/lets_poc/architectwin/06. 기능별 영상-3. dfs.mp4" autoplay muted></video>
+                  <div class="video_title_wrap">
+                    <h6>Design for Safety</h6>
+                    <p>3D Target Hightlight</p>
+                  </div>
+                </li>
+                <li class="slide">
+                  <video src="../images/lets_poc/architectwin/06. 기능별 영상-4. cpted.mp4" autoplay muted></video>
+                  <div class="video_title_wrap">
+                    <h6>CPTED GRID</h6>
+                    <p>Data Visualization Algorithm </p>
+                  </div>
+                </li>
+                <li class="slide">
+                  <video src="../images/lets_poc/architectwin/06. 기능별 영상-5. 센서모니터링.mp4" autoplay muted></video>
+                  <div class="video_title_wrap">
+                    <h6>Sensor Monitoring</h6>
+                    <p>3D Target Hightlight</p>
+                  </div>
+                </li>
+                <li class="slide">
+                  <video src="../images/lets_poc/architectwin/06. 기능별 영상-6. AI_CCTV.mp4" autoplay muted></video>
+                  <div class="video_title_wrap">
+                    <h6>AI CCTV</h6>
+                    <p>Integrated Data Dashboard</p>
+                  </div>
+                </li>
+                <li class="slide">
+                  <video src="../images/lets_poc/architectwin/06. 기능별 영상-1. 실내공기질모니터링.mp4" autoplay muted></video>
+                  <div class="video_title_wrap">
+                    <h6>Air Quality Monitoring</h6>
+                    <p>3D Target Hightlight</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <ul class="video_slider_index" id="video_slider_index1">
+              <li class="active"></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+            </ul>
+          </div>
+          <img src="../images/lets_poc/architectwin/img_01_07.png" alt="">
+          <video src="../images/lets_poc/architectwin/07. 심리스 영상.mp4" muted autoplay loop></video>
+          <img src="../images/lets_poc/architectwin/img_01_08.png" alt="">
+          
+          <div class="architectwin_slider_area">
+            <div class="architectwin_slider_container" id="architectwin_slider2">
+              <ul class="architectwin_slider_wrap">
+                <li class="slide">
+                  <video src="../images/lets_poc/architectwin/08. 빌딩os영상-1. 에너지 모니터링.mp4" autoplay muted></video>
+                  <div class="video_title_wrap">
+                    <h6>Energy Facility Monitoring</h6>
+                    <p>Energy & Facility</p>
+                  </div>
+                </li>
+                <li class="slide">
+                  <video src="../images/lets_poc/architectwin/08. 빌딩os영상-3. 침수피난경로.mp4" autoplay muted></video>
+                  <div class="video_title_wrap">
+                    <h6>Cost & Environment</h6>
+                    <p>Furniture Layout Simulation</p>
+                  </div>
+                </li>
+                <li class="slide">
+                  <video src="../images/lets_poc/architectwin/08. 빌딩os영상-2. 가구시뮬레이션.mp4" autoplay muted></video>
+                  <div class="video_title_wrap">
+                    <h6>Evacuation Simulation</h6>
+                    <p>Safety & Society</p>
+                  </div>
+                </li>
+                <li class="slide">
+                  <video src="../images/lets_poc/architectwin/08. 빌딩os영상-1. 에너지 모니터링.mp4" autoplay muted></video>
+                  <div class="video_title_wrap">
+                    <h6>Energy Facility Monitoring</h6>
+                    <p>Energy & Facility</p> 
+                  </div>
+                </li>
+              </ul>
+              <div class="contactbox_wrap">
+                <div class="contactbox">
+                  <div class="top">
+                    <h3></h3>
+                    <button></button>
+                  </div>
+                  <div class="bottom"></div>
+                </div>
+              </div>
+            </div>
+            <ul class="video_slider_index" id="video_slider_index2">
+              <li class="active"></li>
+              <li></li>
+              <li></li>
+            </ul>
+          </div>
+          <img src="../images/lets_poc/architectwin/img_01_09.png" alt="">
+          <nav class="footer">
+            <button class="bt_back_to_top"></button>
+          </nav>
+        </li>
+        <!-- 오른쪽 패널 두번째 탭(보안관리) 내용 -->         
+        <li>
+          
+          <nav class="footer">
+            <button class="bt_back_to_top"></button>
+          </nav>
+        </li>
+        <!-- 오른쪽 패널 세번째 탭(공간관리) 내용 -->  
+        <li>
+          
+          <nav class="footer">
+            <button class="bt_back_to_top"></button>
+          </nav>
+        </li>
+        <!-- 오른쪽 패널 네번째 탭(자산관리) 내용 -->  
+        <li>
+          
+          <nav class="footer">
+            <button class="bt_back_to_top"></button>
+          </nav>
+        </li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

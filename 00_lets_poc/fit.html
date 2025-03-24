@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIT</title>
+  <link rel="stylesheet" href="../css/style.min.css">
+  <script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function() {     
+
+      // 영상 요소와 버튼 요소들
+      const videoElement = document.getElementById('fit-video');
+      const frameButton = document.getElementById('frame_btn');
+      const skinButton = document.getElementById('skin_btn');
+      const airButton = document.getElementById('air_btn');
+      const closeVideoButton = document.querySelector('.btn_close_video'); // 닫기 버튼
+
+      // 원래 영상의 경로
+      const originalVideoSrc = "../video/2- 카보노미 - (1) 디폴트.mp4";
+
+      // 변경된 영상 경로들
+      const frameVideoSrc = "../video/3- Fit - (1) Frame.mp4";
+      const skinVideoSrc = "../video/3- Fit - (2) Skin Cartridge.mp4";
+      const airVideoSrc = "../video/3- Fit - (3) Air Handling Cartridge.mp4";
+
+      // 영상 변경 함수
+      function changeVideo(newVideoSrc) {
+          // 영상이 페이드 아웃되도록 클래스 추가
+          videoElement.classList.add('fade-out');
+
+          // 페이드 아웃 효과가 끝난 후 영상 변경
+          setTimeout(() => {
+              videoElement.src = newVideoSrc;
+              videoElement.load();  // 새로운 영상 로드
+
+              // 영상이 페이드 인되도록 클래스 추가
+              videoElement.classList.remove('fade-out');
+              videoElement.classList.add('fade-in');
+
+              // 0.4초 후에 페이드 인 클래스를 제거
+              setTimeout(() => {
+                  videoElement.classList.remove('fade-in');
+              }, 400); // 0.4초 후에 'fade-in' 클래스 제거
+
+              // 변경된 영상이 시작되면 닫기 버튼만 보이기
+              closeVideoButton.style.display = 'block';
+              frameButton.style.display = 'none';
+              skinButton.style.display = 'none';
+              airButton.style.display = 'none';
+          }, 400); // 0.4초 후에 영상 소스 변경 (페이드 아웃 효과 시간)
+      }
+
+      // 버튼 클릭 이벤트 리스너 추가
+      frameButton.addEventListener('click', () => {
+          changeVideo(frameVideoSrc);
+      });
+
+      skinButton.addEventListener('click', () => {
+          changeVideo(skinVideoSrc);
+      });
+
+      airButton.addEventListener('click', () => {
+          changeVideo(airVideoSrc);
+      });
+
+      // 영상 재생이 끝났을 때 원래 영상으로 돌아가기
+      videoElement.addEventListener('ended', () => {
+          // 원래 영상으로 돌아가기
+          videoElement.classList.add('fade-out');
+          setTimeout(() => {
+              videoElement.src = originalVideoSrc;
+              videoElement.load();
+              videoElement.classList.remove('fade-out');
+              videoElement.classList.add('fade-in');
+
+              // 0.4초 후에 페이드 인 클래스를 제거
+              setTimeout(() => {
+                  videoElement.classList.remove('fade-in');
+              }, 400); // 0.4초 후에 'fade-in' 클래스 제거
+
+              // 원래 영상이 재생되면 닫기 버튼 숨기기
+              closeVideoButton.style.display = 'none';
+
+              // 모든 버튼 다시 보이기
+              frameButton.style.display = 'block';
+              skinButton.style.display = 'block';
+              airButton.style.display = 'block';
+          }, 400); // 0.4초 후에 원래 영상으로 돌아가기
+      });
+
+      // .btn_close_video 클릭 시 원래 영상으로 돌아가기
+      closeVideoButton.addEventListener('click', () => {
+          videoElement.classList.add('fade-out');
+          setTimeout(() => {
+              videoElement.src = originalVideoSrc;
+              videoElement.load();
+              videoElement.classList.remove('fade-out');
+              videoElement.classList.add('fade-in');
+
+              // 0.4초 후에 페이드 인 클래스를 제거
+              setTimeout(() => {
+                  videoElement.classList.remove('fade-in');
+              }, 400); // 0.4초 후에 'fade-in' 클래스 제거
+
+              // 원래 영상이 재생되면 닫기 버튼 숨기기
+              closeVideoButton.style.display = 'none';
+
+              // 모든 버튼 다시 보이기
+              frameButton.style.display = 'block';
+              skinButton.style.display = 'block';
+              airButton.style.display = 'block';
+          }, 400); // 0.4초 후에 원래 영상으로 돌아가기
+      });
+
+
+
+
+      //오른쪽패널 상단 내비 공통
+      // 모든 .bt_sub_menu 버튼과 .lets_poc_sub_right_contentbox li 요소를 가져옵니다.
+      const buttons = document.querySelectorAll('.bt_sub_menu');
+      const contentItems = document.querySelectorAll('.lets_poc_sub_right_contentbox > li');
+
+      // 각 버튼에 클릭 이벤트 리스너를 추가합니다.
+      buttons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+          // 모든 .lets_poc_sub_right_contentbox li 요소를 숨깁니다.
+          contentItems.forEach(item => {
+            item.style.display = 'none';
+          });
+
+          // 클릭된 버튼에 해당하는 .lets_poc_sub_right_contentbox li 요소만 표시합니다.
+          contentItems[index].style.display = 'block';
+
+          // 모든 버튼에서 selected 클래스를 제거하고 클릭된 버튼에 selected 클래스를 추가합니다.
+          buttons.forEach(btn => {
+            btn.classList.remove('selected');
+          });
+          button.classList.add('selected');
+
+          // 클릭된 li 요소가 화면에서 제일 위로 오게 scrollTop을 설정합니다.
+          contentItems[index].scrollIntoView({
+            behavior: 'auto',
+            block: 'start' // 'start'로 설정하면 해당 요소가 화면의 최상단에 위치하게 됩니다.
+          });
+
+        });
+      });
+      // 추가된 btn_shortcut 버튼들에 대한 처리
+      const shortcutButtons = {
+        btn_shortcut_2: 1, // 두 번째 li
+        btn_shortcut_3: 2, // 세 번째 li
+        btn_shortcut_4: 3  // 네 번째 li
+      };
+
+      Object.keys(shortcutButtons).forEach(buttonId => {
+        const button = document.getElementById(buttonId);
+        const targetIndex = shortcutButtons[buttonId];
+
+        button.addEventListener('click', () => {
+          // 모든 .lets_poc_sub_right_contentbox li 요소를 숨깁니다.
+          contentItems.forEach(item => {
+            item.style.display = 'none';
+          });
+
+          // 해당하는 li 요소만 표시합니다.
+          contentItems[targetIndex].style.display = 'block';
+
+          // 모든 .bt_sub_menu 버튼에서 selected 클래스를 제거하고, 관련된 버튼에 selected 클래스를 추가합니다.
+          buttons.forEach(btn => {
+            btn.classList.remove('selected');
+          });
+          buttons[targetIndex].classList.add('selected');
+
+          // 해당 li 요소가 화면에서 제일 위로 오게 scrollTop을 설정합니다.
+          contentItems[targetIndex].scrollIntoView({
+            behavior: 'auto',
+            block: 'start' // 해당 요소가 화면의 최상단에 위치하게 됩니다.
+          });
+        });
+      });
+
+      
+
+      // 페이지 로드 시, 첫 번째 탭 내용은 기본적으로 보이게 설정합니다.
+      contentItems.forEach((item, index) => {
+        if (index !== 0) {
+          item.style.display = 'none';
+        } else {
+          item.style.display = 'block';
+          
+        }
+      });
+
+
+
+      
+
+
+
+
+      // 푸터 [back to top] 버튼 클릭 시 제일 위 내용으로 이동
+      document.querySelectorAll('.bt_back_to_top').forEach(button => {
+          button.addEventListener('click', function() {
+              // 현재 버튼이 속한 <li> 요소를 찾음
+              const li = button.closest('li');
+              
+              // <li>의 스크롤을 맨 위로 이동
+              li.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'start' // <li>가 맨 위로 가도록 설정
+              });
+          });
+      });
+    
+    });
+  </script>
+</head>
+<body>
+  <div class="lets_poc_sub_wrap" id="lets_poc_sub_fit">
+    <div class="lets_poc_sub_left">
+      <header>
+        <div class="header_container">
+          <a href="../index.html"><img src="../images/logo_black.png" alt="POC SEONGSU 로고"></a>
+          <div class="header_right">
+            <h2 class="menu_title">Let's POC </h2>
+            <button type="button" class="header_menu_bt"></button>
+          </div>
+        </div>
+      </header>
+      <video id="fit-video" class="video" muted autoplay loop>
+        <source src="../video/3- Fit - (1) 디폴트.mp4" type="video/mp4">
+      </video>
+      <div class="lets_poc_sub_left_btgroup">
+        <button type="button" class="lets_poc_sub_left_bt bt_primary" id="frame_btn">frame</button>
+        <button type="button" class="lets_poc_sub_left_bt bt_primary" id="skin_btn">skin cartridge</button>
+        <button type="button" class="lets_poc_sub_left_bt bt_primary" id="air_btn">air handling cartridge</button>
+      </div>
+      <a href="./main.html" class="link_lets_poc_main"> <img src="../images/lets_poc/arrow.png" alt=""> PoC로 돌아가기</a>
+      <button class="btn_close_video"></button>
+    </div>
+    <div class="lets_poc_sub_right">
+      <nav class="lets_poc_sub_right_nav">
+        <div class="top">
+          <img src="../images/logo_fit.png" alt="FIT 로고" class="logo">
+          <button type="button" class="bt_contanct">지금 바로 문의하기</button>
+        </div>
+        <div class="bottom">
+          <button type="button" class="bt_sub_menu selected">FIT Platform</button>
+          <div class="vertical-divider"></div>
+          <button type="button" class="bt_sub_menu">Frame</button>
+          <div class="vertical-divider"></div>
+          <button type="button" class="bt_sub_menu">Skin Catridge</button>
+          <div class="vertical-divider"></div>
+          <button type="button" class="bt_sub_menu">Air handing</button>
+        </div>
+      </nav>
+      <ul class="lets_poc_sub_right_contentbox">
+        <!-- 오른쪽 패널 첫번째 탭(FIT Platform) 내용 -->
+        <li>
+          <video src="../images/lets_poc/FIT Platform/01_Platform_KV_WEB_1920_1080.mp4" muted autoplay loop></video>
+          <img src="../images/lets_poc/FIT Platform/img_01.png" alt="">
+          <div class="height">
+            <img src="../images/lets_poc/FIT Platform/img_02.png" alt="" class="bg">
+            <video src="../images/lets_poc/FIT Platform/02_Platform_Frame_ALL_360_800.mp4" muted autoplay loop class="video_content"></video>
+            <button class="btn_shortcut" id="btn_shortcut_2">바로가기</button>
+          </div>
+          <div class="height">
+            <img src="../images/lets_poc/FIT Platform/img_03.png" alt="" class="bg">
+            <video src="../images/lets_poc/FIT Platform/03_Platform_Cartridge_ALL_328_800.mp4" muted autoplay loop class="video_content"></video>
+            <button class="btn_shortcut" id="btn_shortcut_3">바로가기</button>
+          </div>
+          <div class="height">
+            <img src="../images/lets_poc/FIT Platform/img_04.png" alt="" class="bg">
+            <video src="../images/lets_poc/FIT Platform/04_Platform_OS_ALL_492_492.mp4" muted autoplay loop class="video_content" id="video_platform_os"></video>
+            <button class="btn_shortcut" id="btn_shortcut_4">바로가기</button>
+          </div>
+          <video src="../images/lets_poc/FIT Platform/05_Platform_b-IOT_ALL_1600_1088.mp4" muted autoplay loop></video>
+          <img src="../images/lets_poc/FIT Platform/img_05.png" alt="">
+          <div class="height2">
+            <img src="../images/lets_poc/FIT Platform/img_06.png" alt="" class="bg">
+            <video src="../images/lets_poc/FIT Platform/07_Platform_Optimized_ALL_1080_1080.mp4" muted autoplay loop class="video_content"></video>
+          </div>
+          <div class="height2">
+            <img src="../images/lets_poc/FIT Platform/img_07.png" alt="" class="bg">
+            <video src="../images/lets_poc/FIT Platform/08_Platform_Customized_ALL_1080_1080.mp4" muted autoplay loop class="video_content"></video>
+          </div>
+          <div class="height2">
+            <img src="../images/lets_poc/FIT Platform/img_08.png" alt="" class="bg">
+            <video src="../images/lets_poc/FIT Platform/09_Platform_Efficient_ALL_1080_1080.mp4" muted autoplay loop class="video_content" id="video_efficient"></video>
+          </div>
+          <video src="../images/lets_poc/FIT Platform/10_Platform_ECO_TAB_1080_606.mp4" muted autoplay loop></video>
+          <nav class="footer">
+            <button class="bt_back_to_top"></button>
+            <a href="https://fit-platform.com/platform" id="link_fit_hompage" target="_blank">홈페이지</a>
+          </nav>
+        </li>
+        <!-- 오른쪽 패널 두번째 탭(Frame) 내용 -->         
+        <li>
+          <img src="../images/lets_poc/FRAME/img_01.png" alt="">
+          <img src="../images/lets_poc/FRAME/img_02.png" alt="">
+          <div class="height2">
+            <img src="../images/lets_poc/FRAME/img_03.png" alt="" class="bg">
+            <video src="../images/lets_poc/FRAME/01_Frame_서랍식개폐구조_WEB_1080_1312.mp4" muted autoplay loop class="video_content2"></video>
+          </div>
+          <div class="height2">
+            <img src="../images/lets_poc/FRAME/img_04.png" alt="" class="bg">
+            <video src="../images/lets_poc/FRAME/02_Frame_카트리지교체_MB_1080_1648.mp4" muted autoplay loop class="video_content2"></video>
+          </div>
+          <div class="height2">
+            <img src="../images/lets_poc/FRAME/img_05.png" alt="" class="bg">
+            <video src="../images/lets_poc/FRAME/03_Frame_건물맞춤크기변경_WEB_1080_1312.mp4" muted autoplay loop class="video_content2"></video>
+          </div>
+          <img src="../images/lets_poc/FRAME/img_06.png" alt="">
+          <img src="../images/lets_poc/FRAME/img_07.png" alt="">
+          <nav class="footer">
+            <button class="bt_back_to_top"></button>
+          </nav>
+        </li>
+        <!-- 오른쪽 패널 세번째 탭(Skin Catridge) 내용 -->  
+        <li>
+          <img src="../images/lets_poc/SKIN/img_01.png" alt="">
+          <img src="../images/lets_poc/SKIN/img_02.png" alt="">
+          <div class="height2">
+            <img src="../images/lets_poc/SKIN/img_03.png" alt="" class="bg">
+            <video src="../images/lets_poc/SKIN/01_Skin_스킨컨트롤_WEB_1080_1312_240305.mp4" muted autoplay loop class="video_content2"></video>
+          </div>
+          <div class="height2">
+            <img src="../images/lets_poc/SKIN/img_04.png" alt="" class="bg">
+            <video src="../images/lets_poc/SKIN/02_Skin_조도제어_1080_1648_MB.mp4" muted autoplay loop class="video_content2"></video>
+          </div>
+          <div class="height2">
+            <img src="../images/lets_poc/SKIN/img_05.png" alt="" class="bg">
+            <video src="../images/lets_poc/SKIN/03_Skin_스타일연출_WEB_1080_1312_240305.mp4" muted autoplay loop class="video_content2"></video>
+          </div>
+          <img src="../images/lets_poc/SKIN/img_06.png" alt="">
+          <img src="../images/lets_poc/SKIN/img_07.png" alt="">
+          <nav class="footer">
+            <button class="bt_back_to_top"></button>
+          </nav>
+        </li>
+        <!-- 오른쪽 패널 네네번째 탭(air handling cartridge) 내용 -->  
+        <li>
+          <img src="../images/lets_poc/AIR/img_01.png" alt="">
+          <img src="../images/lets_poc/AIR/img_02.png" alt="">
+          <div class="height2">
+            <img src="../images/lets_poc/AIR/img_03.png" alt="" class="bg">
+            <video src="../images/lets_poc/AIR/01_Air_공간사용_WEB_1080_1312.mp4" muted autoplay loop class="video_content2"></video>
+          </div>
+          <div class="height2">
+            <img src="../images/lets_poc/AIR/img_04.png" alt="" class="bg">
+            <video src="../images/lets_poc/AIR/02_Air_공기순환_WEB_1080_1312.mp4" muted autoplay loop class="video_content2"></video>
+          </div>
+          <img src="../images/lets_poc/AIR/img_05.png" alt="">
+          <img src="../images/lets_poc/AIR/img_06.png" alt="">
+          <img src="../images/lets_poc/AIR/img_07.png" alt="">
+          <nav class="footer">
+            <button class="bt_back_to_top"></button>
+          </nav>
+        </li>
+        
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
