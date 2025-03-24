@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POC SEONGSU</title>
+  <link rel="stylesheet" href="css/style.min.css">
+  <link rel="icon" href="/favicon_POC.ico" type="image/x-icon">
+  <script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function() {
+    window.scrollTo(0, 0);
+
+    // 컨테이너 너비
+    var container_width = $('.container').width();
+
+    // 뷰포트 높이
+    var viewportHeight = window.innerHeight;
+
+    // 인트로1 높이
+    var intro1_height = container_width * 6;
+    $('#intro1_wrap').height(intro1_height);
+
+    //#logo_large 표출
+    $('#logo_large').fadeIn(500);
+    $('#logo_large').css({'bottom': 15 + '%'});
+
+    //[인트로2] 스크롤 영상 표출
+    let loaded = false;
+const intro2_video_playback = 450;
+const intro2_video_ending = 800;
+const intro2_video_element = document.querySelector("#intro2_wrap .video");
+const intro2_wrap_start = document.getElementById("intro2_wrap");
+
+const fadeUp = (element) => {
+    element.classList.remove("hidden");
+    setTimeout(() => {
+        element.classList.remove("transition-duration");
+        loaded = true;
+    }, 2000);
+};
+
+const play = () => {
+    intro2_video_element.currentTime = (window.scrollY - intro2_wrap_start.offsetTop) / intro2_video_playback;
+};
+
+let lastScrollTime = 0;
+const throttleDelay = 100; // 100ms마다 실행
+
+const throttleScroll = () => {
+    const currentTime = new Date().getTime();
+    if (currentTime - lastScrollTime >= throttleDelay) {
+        lastScrollTime = currentTime;
+        play(); // 스크롤 시 실행할 함수
+    }
+};
+
+document.addEventListener("scroll", throttleScroll);
+
+intro2_video_element.addEventListener("loadedmetadata", () => {
+    if (!loaded) {
+        intro2_wrap_start.style.height =
+            intro2_video_element.duration * intro2_video_playback + intro2_video_ending + "px";
+        fadeUp(intro2_wrap_start);
+    }
+});
+
+intro2_video_element.src = "./video/intro2.mp4";
+
+    // 스크롤 이벤트 시작
+    $(window).on('scroll', function() {
+        var scroll = $(document).scrollTop();
+        
+
+        //[인트로1] 시작----------------------------------------------------------------
+
+        //[인트로1] 스크롤 속도조절
+        var intro1_scroll = -1;
+
+        //[인트로1] 로고 및 메뉴명('#intro1_wrap .scrollbox')의 left값
+        var intro1_scrollbox_left = $('#intro1_wrap .scrollbox').width();
+
+        //[인트로1] intro1_pagenum
+        var intro1_pagenum = (scroll / container_width) - 2;
+
+        //[인트로1] 로고 및 메뉴명 그룹('#intro1_wrap .scrollbox') 이동
+        if (scroll > 0) {
+            $('#intro1_wrap .scrollbox').css({'left': scroll * intro1_scroll});
+        } else {
+            $('#intro1_wrap .scrollbox').css({'left': 0});
+        }
+
+        //[인트로1] intro1_floornum
+        function formatNumber(num) {
+            let integerPart = Math.floor(num);
+            return integerPart.toString().padStart(2, '0');
+        }
+
+        var intro1_floornum = formatNumber(intro1_pagenum);
+
+        //[인트로1] 메뉴가 지나감에 따라 프로그레스 바 및 넘버 변경
+        if (intro1_pagenum >= 0 && intro1_pagenum < 4) {
+            $('#intro1_wrap .progress_num .now').text(intro1_floornum);
+        }
+        $('#intro1_wrap .progress_bar > div').css({'width': intro1_pagenum * 33 + '%'});
+
+        //[인트로1] 첫 화면의 큰 로고가 지나가면 고정 로고 노출
+        if (intro1_pagenum > -1) {
+            $('#logo').fadeIn(500);
+            $('#logo').css({'margin-top': 0});
+        } else {
+            $('#logo').css({'margin-top': '-104px'});
+            $('#logo').fadeOut(500);
+        }
+
+        //[인트로1] 첫번째 메뉴  Tech ready "OOO"가 등장할때 프로그레스 UI 노출
+        if (intro1_pagenum > 0) {
+            $('#intro1_wrap .progress_wrap').show();
+            $('#intro1_wrap .progress_wrap').css({'bottom': '10vh'});
+        } else {
+            $('#intro1_wrap .progress_wrap').css({'bottom': '-20vh'});
+        }
+
+        //[인트로2] 시작----------------------------------------------------------------
+        var intro2_start = intro1_height - $(window).height();
+
+        //[인트로2] 인트로1의 position: fixed 요소 해제
+        if (scroll >= intro2_start + viewportHeight) {
+            $('#intro1_wrap .video').css({'position': 'absolute'});
+            $('#intro1_wrap .container').css({'position': 'absolute'});
+        } else {
+            $('#intro1_wrap .video').css({'position': 'fixed'});
+            $('#intro1_wrap .container').css({'position': 'fixed'});
+        }
+    });
+
+    let isScrolling = false; 
+
+    // 터치스크롤 처리
+    $(window).on("touchmove", function(e) {
+        var touch = e.originalEvent.touches[0];
+        var scroll = touch.pageY;
+        // 추가적인 터치스크롤 처리 코드 필요시 구현
+    });
+
+    // 스크롤 성능 최적화
+    $(window).on("scroll", function() {
+        if (!isScrolling) {
+            window.requestAnimationFrame(function() {
+                // 스크롤 이벤트 처리 코드
+                isScrolling = false;
+            });
+            isScrolling = true;
+        }
+    });
+});
+  </script>
+</head>
+<body>
+  
+  <header>
+    <div class="container">
+      <a href="#" id="logo"><img src="./images/logo_black.png" alt="POC SEONGSU 로고"></a>
+    </div>
+  </header>
+
+  <!-- [인트로1] 시작 -->
+  <div id="intro1_wrap">
+    <video class="video" src="./video/intro1.mp4" autoplay muted loop></video>
+    <!--<img src="./images/intro_sample_bg_img.png" alt="" class="video">-->
+    
+    <!-- [인트로1] - 컨테이너 -->
+    <div class="container">
+      <ul class="scrollbox">
+        <li>
+          <img src="./images/logo_large.png" alt="POC SEONGSU 로고" id="logo_large">
+        </li>
+        <li></li>
+        <li>
+          <p class="menu_num">00</p>
+          <h2 class="menu_title">Let's POC</h2>
+          <a href="./00_lets_poc/main.html" class="bt_neutral">Enter</a>
+        </li>
+        <li>
+          <p class="menu_num">01</p>
+          <h2 class="menu_title">POC Plan</h2>
+          <a href="./01_poc_plan/main.html" class="bt_neutral">Enter</a>
+        </li>
+        <li>
+          <p class="menu_num">02</p>
+          <h2 class="menu_title">POC Tour</h2>
+          <a href="./02_poc_tour/main.html" class="bt_neutral">Enter</a>
+        </li>
+        <li>
+          <p class="menu_num">03</p>
+          <h2 class="menu_title">Smart POC</h2>
+          <a href="./03_smart_poc/main.html" class="bt_neutral">Enter</a>
+        </li>
+      </ul>
+
+      <div class="progress_wrap">
+        <div class="progress_num">
+          <p class="now">00</p>
+          <p>/03</p>
+        </div>
+        <div class="progress_bar">
+          <div></div>
+        </div>
+      </div>
+
+    </div><!-- [인트로1] - 컨테이너 -->
+    
+  </div>
+  <!-- [인트로1] 끝 -->
+
+  <div id="intro2_wrap">
+    <div class="intro2_video_wrap">
+      <video class="video" src="" muted></video>
+    </div>
+  </div>
+  
+  <div id="intro3_wrap">
+    <video src="./video/intro1.mp4" class="video" muted autoplay loop></video>
+    <ul class="main_menu_list container">
+      <li>
+        <a href="./01_poc_plan/main.html">
+          <img src="./images/intro_round_01.png" alt="">
+          <p class="num">01</p>  
+          <h2 class="title">POC<br>Plan</h2>
+        </a>
+      </li>
+      <li>
+        <a href="./02_poc_tour/main.html">
+          <p class="num">02</p>
+          <img src="./images/intro_round_02.png" alt="">
+          <h2 class="title">POC Tour</h2>
+        </a>
+      </li>
+      <li>
+        <a href="./03_smart_poc/">
+          <div>
+            <h2 class="title">Smart<br>POC</h2>
+            <p class="num">03</p>
+          </div>
+          <img src="./images/intro_round_03.png" alt="">
+        </a>
+      </li>
+    </ul>
+  </div>
+  <footer>
+      <div class="footer_wrap container">
+          <img src="./images/logo_black.png" alt="POC SEONGSU LOGO" class="logo">
+          <p class="address_han">서울특별시 성동구 성수이로 121/123</p>
+          <p class="address_eng">121/123, Seongsui-ro, Saeongdong-gu,<br> Seoul, Republic of Korea</p>
+          <ul class="contact">
+            <li>Contact@mail.com</li>
+            <li>+82 02 123 4567</li>
+            <li>SNS</li>
+          </ul>
+          <p class="copyright">COPYRIGHT©Samoo Architects & Engineers 2025. ALL RIGHTS RESERVED.</p> 
+        </div>
+  </footer>
+</body>
+</html>
